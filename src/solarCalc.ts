@@ -1,6 +1,12 @@
 "use strict"
 
-class SolarSystem {
+export default class SolarSystem {
+  bodies: any;
+  RADS: number;
+  DEGS: number;
+  HOURS: number;
+  orbitals: object;
+
   constructor(){
     this.bodies = {'mercury': {}, 'venus': {},'earth': {},'mars': {},'saturn': {},'uranus': {},'neptune': {},'pluto': {}}
     this.RADS = Math.PI/180
@@ -17,7 +23,7 @@ class SolarSystem {
       p: longitude of perihelion at date of elements, degrees
     */
     this.orbitals = {
-      'mercury': (cy)=>{
+      'mercury': (cy:number)=>{
         return {
           a: 0.38709893 + 0.00000066*cy,
           e: 0.20563069 + 0.00002527*cy,
@@ -27,7 +33,7 @@ class SolarSystem {
           L: ((252.25084 + 538101628.29*cy/3600)*this.RADS)
         }  
       },
-      'venus': (cy)=>{
+      'venus': (cy:number)=>{
         return {   
           a: 0.72333199 + 0.00000092*cy,
           e: 0.00677323 - 0.00004938*cy,
@@ -37,7 +43,7 @@ class SolarSystem {
           L: (181.97973 + 210664136.06*cy/3600)*this.RADS
         }
       },
-      'earth': (cy)=>{
+      'earth': (cy:number)=>{
         return {
           a: 1.00000011 - 0.00000005*cy,
           e: 0.01671022 - 0.00003804*cy,
@@ -47,7 +53,7 @@ class SolarSystem {
           L: ((100.46435 + 129597740.63*cy/3600)*this.RADS)
         }
       },
-      'mars': (cy)=>{
+      'mars': (cy:number)=>{
         return {
           a: 1.52366231 - 0.00007221*cy,
           e: 0.09341233 + 0.00011902*cy,
@@ -57,7 +63,7 @@ class SolarSystem {
           L: ((355.45332 + 68905103.78*cy/3600)*this.RADS)
         }
       },
-      'jupiter': (cy)=>{
+      'jupiter': (cy:number)=>{
         return {
           a: 5.20336301 + 0.00060737*cy,
           e: 0.04839266 - 0.00012880*cy,
@@ -67,7 +73,7 @@ class SolarSystem {
           L: ((34.40438 + 10925078.35*cy/3600)*this.RADS)
         }
       },
-      'saturn': (cy)=>{
+      'saturn': (cy:number)=>{
         return {
           a: 9.53707032 - 0.00301530*cy,
           e: 0.05415060 - 0.00036762*cy,
@@ -77,7 +83,7 @@ class SolarSystem {
           L: ((49.94432 + 4401052.95*cy/3600)*this.RADS)
         }
       },
-      'uranus': (cy)=>{
+      'uranus': (cy:number)=>{
         return {
           a: 19.19126393 + 0.00152025*cy,
           e:  0.04716771 - 0.00019150*cy,
@@ -87,7 +93,7 @@ class SolarSystem {
           L: ((313.23218 + 1542547.79*cy/3600)*this.RADS)
         }
       },
-      'neptune': (cy)=>{
+      'neptune': (cy:number)=>{
         return {
           a: 30.06896348 - 0.00125196*cy,
           e:  0.00858587 + 0.00002510*cy,
@@ -97,7 +103,7 @@ class SolarSystem {
           L: ((304.88003 + 786449.21*cy/3600)*this.RADS)
         }
       },
-      'pluto': (cy)=>{
+      'pluto': (cy:number)=>{
         return {
           a: 39.48168677 - 0.00076912*cy,
           e:  0.24880766 + 0.00006465*cy,
@@ -110,13 +116,13 @@ class SolarSystem {
     }
   }
 
-  floor = (x) => {
+  floor = (x: number) => {
     let r;
     if (x >= 0.0) r = Math.floor(x);
     else r = Math.ceil(x);
     return r;
   }
-  mod2pi = (angle) => {
+  mod2pi = (angle: number) => {
     var b = angle/(2*Math.PI);
     var a = (2*Math.PI)*(b - this.floor(b));  
     if (a < 0) a = (2*Math.PI) + a;
@@ -124,26 +130,26 @@ class SolarSystem {
   }
 
   getDaysJ2000(){
-    const now = new Date()
-    const year  = now.getUTCFullYear(),
-          month = now.getUTCMonth() + 1,
-          day   = now.getUTCDate(),
-          hour  = now.getUTCHours(),
-          mins  = now.getUTCMinutes(),
-          secs  = now.getUTCSeconds()
-    const h = hour + mins/60;
-    const rv = 367*year 
+    const now: any = new Date()
+    const year: number = now.getUTCFullYear(),
+          month: number = now.getUTCMonth() + 1,
+          day: number = now.getUTCDate(),
+          hour: number = now.getUTCHours(),
+          mins: number = now.getUTCMinutes(),
+          secs: number = now.getUTCSeconds()
+    const h: number = hour + mins/60;
+    const rv: number = 367*year 
            - Math.floor(7*(year + Math.floor((month + 9)/12))/4) 
            + Math.floor(275*month/9) + day - 730531.5 + h/24;
     
     return rv;
   }
 
-  trueAnomaly(M, e){
-    var V, E1;
+  trueAnomaly(M:number, e:number){
+    let V, E1;
 
     //approximation of eccentric anomaly
-    var E = M + e*Math.sin(M)*(1.0 + e*Math.cos(M));
+    const E = M + e*Math.sin(M)*(1.0 + e*Math.cos(M));
 
     // convert eccentric anomaly to true anomaly
     V = 2*Math.atan(Math.sqrt((1 + e)/(1 - e))*Math.tan(0.5*E));
@@ -156,7 +162,7 @@ class SolarSystem {
     const m = (L-w),
           v = this.trueAnomaly(m,e),
           r = a*(1-e**2)/(1+e*Math.cos(v))
-    let x,y,z
+    let x:number,y:number,z:number
     if(body.name==='earth'){
       x = r*Math.cos(v + w),
       y = r*Math.sin(v + w),
@@ -189,7 +195,7 @@ class SolarSystem {
           Yeq = Y*Math.cos(tilt) - Z*Math.sin(tilt),
           Zeq = Y*Math.sin(tilt) + Z*Math.cos(tilt)
     //compute RA and DEC
-    this.bodies[body.name].RA = mod2pi(Math.atan2(Yeq, Xeq))*this.DEGS*this.HOURS
+    this.bodies[body.name].RA = this.mod2pi(Math.atan2(Yeq, Xeq))*this.DEGS*this.HOURS
     this.bodies[body.name].DEC = Math.atan(Zeq/Math.sqrt(Xeq*Xeq + Yeq*Yeq))*this.DEGS;
     
 
@@ -216,5 +222,3 @@ class SolarSystem {
     })
   }
 }
-
-module.export = SolarSystem
