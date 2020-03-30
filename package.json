@@ -6,28 +6,21 @@
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
-    "start:run": "nodemon build/index.js",
+    "start:run": "nodemon build/solarCalc.js",
     "start:build": "tsc -w",
     "start": "concurrently npm:start:*"
   },
   "author": "Jacek Walasik",
   "license": "ISC",
   "devDependencies": {
-    "@types/jest": "^25.1.4",
-    "babel-core": "^6.26.3",
-    "babel-loader": "^8.1.0",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-es2015": "^6.24.1",
-    "concurrently": "^5.1.0",
-    "dotenv": "^8.2.0",
-    "jest": "^25.2.3",
-    "nodemon": "^2.0.2",
-    "ts-jest": "^25.2.1",
-    "tslint": "^6.1.0",
+    "@types/jest": "^24.0.18",
+    "concurrently": "^4.1.2",
+    "jest": "^24.9.0",
+    "nodemon": "^1.19.2",
+    "ts-jest": "^24.1.0",
+    "tslint": "^5.20.0",
+    "tslint-config-prettier": "^1.18.0",
     "tslint-jest": "^1.0.5",
-    "typescript": "^3.8.3",
-    "webpack": "^4.42.0",
-    "webpack-cli": "^3.3.11",
-    "webpack-dev-server": "^3.10.3"
+    "typescript": "^3.6.3"
   }
 }

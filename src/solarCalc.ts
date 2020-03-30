@@ -1,5 +1,3 @@
-"use strict"
-
 export default class SolarSystem {
   bodies: any;
   RADS: number;
@@ -129,19 +127,21 @@ export default class SolarSystem {
     return a;
   }
 
-  getDaysJ2000(){
+  getDaysJ2000(date?: string){
     const now: any = new Date()
+    date ? now.setTime(date) : null
     const year: number = now.getUTCFullYear(),
           month: number = now.getUTCMonth() + 1,
           day: number = now.getUTCDate(),
           hour: number = now.getUTCHours(),
           mins: number = now.getUTCMinutes(),
           secs: number = now.getUTCSeconds()
+    
     const h: number = hour + mins/60;
     const rv: number = 367*year 
-           - Math.floor(7*(year + Math.floor((month + 9)/12))/4) 
+           - Math.floor(7*(year + Math.floor((month + 9)/12))/4)
            + Math.floor(275*month/9) + day - 730531.5 + h/24;
-    
+
     return rv;
   }
 
@@ -157,7 +157,7 @@ export default class SolarSystem {
     return V;
   }
 
-  helioCoordinates(body){
+  helioCoordinates(body:any){
     const {a,e,i,o,w,L} = body.elements
     const m = (L-w),
           v = this.trueAnomaly(m,e),
@@ -179,7 +179,7 @@ export default class SolarSystem {
     }
   }
 
-  geoCoordinates(body){
+  geoCoordinates(body:any){
     if(body.name === 'earth') return
     const {x:xe, y:ye, z:ze} = this.bodies.earth.heliocentricCoordinates
 
@@ -199,19 +199,19 @@ export default class SolarSystem {
     this.bodies[body.name].DEC = Math.atan(Zeq/Math.sqrt(Xeq*Xeq + Yeq*Yeq))*this.DEGS;
     
 
-    console.log(body.name)
-    console.log('RA:',this.bodies[body.name].RA)
-    console.log('DEC:',this.bodies[body.name].DEC)
+    // console.log(body.name)
+    // console.log('RA:',this.bodies[body.name].RA)
+    // console.log('DEC:',this.bodies[body.name].DEC)
   }
 
-  init(){
+  init(date?: string){
     //calculate days since epoch j2000
-    const days = this.getDaysJ2000()
+    const days = this.getDaysJ2000(date)
     //compute orbital elements
-    Object.keys(this.bodies).forEach(key => {
+    Object.keys(this.bodies).forEach((key: string)=> {
       this.bodies[key] = {
         name: key,
-        elements: this.orbitals[key](days/36525)
+        elements: (<any>this.orbitals)[key](days/36525)
       }
       //calculate heliocentrical coordinates for each object
       this.helioCoordinates(this.bodies[key])
