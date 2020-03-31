@@ -127,20 +127,20 @@ export default class SolarSystem {
     return a;
   }
 
-  getDaysJ2000(date?: string){
-    const now: any = new Date()
-    date ? now.setTime(date) : null
-    const year: number = now.getUTCFullYear(),
-          month: number = now.getUTCMonth() + 1,
-          day: number = now.getUTCDate(),
-          hour: number = now.getUTCHours(),
-          mins: number = now.getUTCMinutes(),
-          secs: number = now.getUTCSeconds()
+  getDaysJ2000(date?: Date){
+    const time: any = date ? date : new Date()
+    const year: number = time.getUTCFullYear(),
+          month: number = time.getUTCMonth() + 1,
+          day: number = time.getUTCDate(),
+          hour: number = time.getUTCHours(),
+          mins: number = time.getUTCMinutes(),
+          secs: number = time.getUTCSeconds()
     
     const h: number = hour + mins/60;
     const rv: number = 367*year 
            - Math.floor(7*(year + Math.floor((month + 9)/12))/4)
            + Math.floor(275*month/9) + day - 730531.5 + h/24;
+
 
     return rv;
   }
@@ -204,7 +204,7 @@ export default class SolarSystem {
     // console.log('DEC:',this.bodies[body.name].DEC)
   }
 
-  init(date?: string){
+  init(date?: Date){
     //calculate days since epoch j2000
     const days = this.getDaysJ2000(date)
     //compute orbital elements
