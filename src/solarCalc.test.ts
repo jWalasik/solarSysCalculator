@@ -7,7 +7,7 @@ test('Should successfully initialize solar system instance', ()=>{
 })
 
 test('Should successfully compute planetary position for current time', ()=>{
-  solarSystem.init()
+  solarSystem.compute()
   for(let key in solarSystem.bodies) {
     if (key !== 'earth'){
       expect(solarSystem.bodies[key]).toHaveProperty('RA')
@@ -18,7 +18,7 @@ test('Should successfully compute planetary position for current time', ()=>{
 
 test('Should successfully compute planetary position for given time', ()=>{
   const jd2000 = new Date(946684800*1000)
-  solarSystem.init(jd2000)
+  solarSystem.compute(jd2000)
   for(let key in solarSystem.bodies) {
     if (key !== 'earth'){
       expect(solarSystem.bodies[key]).toHaveProperty('RA')
@@ -29,13 +29,51 @@ test('Should successfully compute planetary position for given time', ()=>{
 
 test('Should properly compute planetary position for julian day 2000 00:00:00', ()=>{
   const jd2000 = new Date(946684800*1000)
-  solarSystem.init(jd2000)
+  solarSystem.compute(jd2000)
   for(let key in solarSystem.bodies) {
     if (key !== 'earth'){
       expect(solarSystem.bodies[key].RA).toEqual(bodies2000[key].RA)
       expect(solarSystem.bodies[key].DEC).toEqual(bodies2000[key].DEC)
     }    
   }
+})
+
+test('Should properly update planetary positions', ()=>{
+  const oldDate = new Date(946684800*1000)
+  const newDate = new Date()
+
+  solarSystem.compute(oldDate)
+  const old = {...solarSystem.bodies}
+  
+
+  solarSystem.compute(newDate)
+  const current = {...solarSystem.bodies}
+
+  expect(old.mars.RA).not.toBe(current.mars.RA)
+  expect(old.venus.DEC).not.toBe(current.venus.DEC)
+})
+
+
+test('Should return geocentric coordinates of a planet', ()=>{
+  solarSystem.compute(new Date(946684800*1000))
+  const mars = solarSystem.geocentricCoords('mars')
+  expect(mars).toMatchObject({
+    name: 'mars',
+    ra: 22.01033019672617,
+    dec: -13.320495892197188
+  })
+})
+
+test('Should return geocentric coordinates of all planets', ()=>{
+  solarSystem.compute(new Date(946684800*1000))
+  const planets = solarSystem.geocentricCoords()
+
+  expect(planets).toHaveLength(8)
+  expect.objectContaining({
+    name: expect.any(String),
+    ra: expect.any(Number),
+    dec: expect.any(Number)
+  })
 })
 
 //mocks

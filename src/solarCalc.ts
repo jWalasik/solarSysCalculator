@@ -197,14 +197,9 @@ export default class SolarSystem {
     //compute RA and DEC
     this.bodies[body.name].RA = this.mod2pi(Math.atan2(Yeq, Xeq))*this.DEGS*this.HOURS
     this.bodies[body.name].DEC = Math.atan(Zeq/Math.sqrt(Xeq*Xeq + Yeq*Yeq))*this.DEGS;
-    
-
-    // console.log(body.name)
-    // console.log('RA:',this.bodies[body.name].RA)
-    // console.log('DEC:',this.bodies[body.name].DEC)
   }
 
-  init(date?: Date){
+  compute(date?: Date){
     //calculate days since epoch j2000
     const days = this.getDaysJ2000(date)
     //compute orbital elements
@@ -220,5 +215,25 @@ export default class SolarSystem {
     Object.keys(this.bodies).forEach(key => {
       this.geoCoordinates(this.bodies[key])
     })
+  }
+
+  geocentricCoords(name?: string){
+    if(name){
+      const {RA, DEC} = this.bodies[name]
+      return {
+        name: name,
+        ra: RA,
+        dec: DEC
+      }
+    }
+    const positions = Object.keys(this.bodies).map((key)=>{
+      const {RA, DEC} = this.bodies[key]
+      return {
+        name: key,
+        ra: RA,
+        dec: DEC
+      }
+    })
+    return positions
   }
 }
