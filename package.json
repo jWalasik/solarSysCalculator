@@ -2,12 +2,12 @@
   "name": "solar-system-calculator",
   "version": "1.0.0",
   "description": "small library for computation of objects in solar system",
-  "main": "index.js",
+  "main": "lib/solarCalc.js",
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
-    "start:run": "nodemon build/solarCalc.js",
-    "start:build": "tsc -w",
+    "run": "nodemon build/solarCalc.js",
+    "build": "tsc -w",
     "start": "concurrently npm:start:*"
   },
   "author": "Jacek Walasik",
