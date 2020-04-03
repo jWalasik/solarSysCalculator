@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "description": "small library for computation of objects in solar system",
   "main": "lib/solarCalc.js",
+  "files": ["lib/**/*"],
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
-    "run": "nodemon build/solarCalc.js",
+    "run": "nodemon build/index.js",
     "build": "tsc -w",
     "start": "concurrently npm:start:*"
   },
