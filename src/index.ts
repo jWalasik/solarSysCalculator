@@ -6,7 +6,7 @@ export default class SolarSystem {
   orbitals: object;
 
   constructor(){
-    this.bodies = {'mercury': {}, 'venus': {},'earth': {},'mars': {},'saturn': {},'uranus': {},'neptune': {},'pluto': {}}
+    this.bodies = {'mercury': {}, 'venus': {},'earth': {},'mars': {},'jupiter': {},'saturn': {},'uranus': {},'neptune': {},'pluto': {}}
     this.RADS = Math.PI/180
     this.DEGS = 180/Math.PI
     this.HOURS = 24/360
