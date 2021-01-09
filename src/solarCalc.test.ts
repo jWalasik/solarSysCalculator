@@ -1,4 +1,4 @@
-import SolarSystem from './solarCalc'
+import SolarSystem from './index'
 
 const solarSystem = new SolarSystem()
 
@@ -68,7 +68,7 @@ test('Should return geocentric coordinates of all planets', ()=>{
   solarSystem.compute(new Date(946684800*1000))
   const planets = solarSystem.geocentricCoords()
 
-  expect(planets).toHaveLength(8)
+  expect(planets).toHaveLength(9)
   expect.objectContaining({
     name: expect.any(String),
     ra: expect.any(Number),
@@ -92,6 +92,10 @@ const bodies2000: any = {
   'mars': {
     RA: 22.01033019672617,
     DEC: -13.320495892197188
+  },
+  'jupiter': {
+    RA: 1.5966640784032016,
+    DEC: 8.62320867383284
   },
   'saturn': {
     RA: 2.573489827386895,
